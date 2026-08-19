@@ -1,9 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function MovieCard({ movie }) {
     const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
 
-    return(
+    return( 
+        <Link href={`/movie/${movie.id}`}>
         <div className="bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 flex flex-col justify-between">
             <div className="relative w-full h-80">
                 <Image
@@ -23,6 +25,7 @@ export default function MovieCard({ movie }) {
                 </div>
             </div>
         </div>
+        </Link>
     )
 }
 
