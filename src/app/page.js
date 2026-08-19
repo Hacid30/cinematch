@@ -1,9 +1,28 @@
 import Image from "next/image";
 
-export default function Home() {
+async function getTrendingMovies() {
+  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.TMDB_API_KEY}&language=es-CO`);
+
+  if (!res){
+    throw new Error('Error al conectar con TMDB');
+  }
+
+  return res.json();
+}
+
+export default async function Home() {
+  const data = await getTrendingMovies();
+  const movies = data.results;
+
   return (
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <h1>Hola CineMatch 🍿</h1>
+      <main className="bg-slate-900 min-h-screen p-10">
+        <h1 className="text-4xl font-bold text-sky-400 mb-6">Tendencias Hoy 🍿</h1>
+        
+        <ul className="text-slate-300 space-y-2">
+          {movies.map((movie) => (
+            <li key={movie.id}>🎥 {movie.title}</li>
+          ))}
+        </ul>
       </main>
   );
 }
