@@ -6,7 +6,7 @@ async function getMovieDetails(id) {
         `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=es-CO`
     );
 
-    if (!res) {
+    if (!res.ok) {
         throw new Error('No se pudo obtener la información de la película');
     }
 
