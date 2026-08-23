@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 async function getMovieDetails(id) {
     const res = await fetch(
         `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=es-CO`
     );
+
+    if (res.status === 404 ){
+        notFound();
+    }
 
     if (!res.ok) {
         throw new Error('No se pudo obtener la información de la película');
