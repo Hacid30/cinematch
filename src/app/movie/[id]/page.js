@@ -20,6 +20,7 @@ async function getMovieDetails(id) {
 
 export default async function MovieDetailPage( { params } ){
     const { id } = await params;
+    
     const movie = await getMovieDetails(id);
 
     const backdropUrl = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
