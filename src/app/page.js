@@ -1,7 +1,8 @@
 import MovieCard from "@/components/MovieCard";
+import Pagination from "@/components/Pagination";
 
-async function getTrendingMovies() {
-  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.TMDB_API_KEY}&language=es-CO`,
+async function getTrendingMovies(page=1) {
+  const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.TMDB_API_KEY}&language=es-CO&page=${page}`,
     { next: { revalidate: 3600 } }
   );
 
@@ -12,9 +13,13 @@ async function getTrendingMovies() {
   return res.json();
 }
 
-export default async function Home() {
-  const data = await getTrendingMovies();
-  const movies = data.results;
+export default async function Home({ searchParams }) {
+  
+  const { page } = await searchParams;
+  const currentPage = Number(page) || 1;
+
+  const data = await getTrendingMovies(currentPage);
+  const totalPages = Math.min(data.total_pages || 1, 500);
 
   return (
       <main className="bg-slate-900 min-h-screen p-10">
@@ -25,10 +30,12 @@ export default async function Home() {
         <h2 className="text-xl font-bold text-white mb-6">Tendencias Hoy 🍿</h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {movies.map((movie) => (
+          {data.results.map((movie) => (
             <MovieCard key={movie.id} movie={movie}  />
           ))}
         </div>
+
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </main>
   );
 }

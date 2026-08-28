@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import BackButton from "@/components/BackButton";
 import { notFound } from "next/navigation";
 
 async function getMovieDetails(id) {
@@ -39,12 +39,7 @@ export default async function MovieDetailPage( { params } ){
                     />
                 )}
                 <div className="absolute inset-0 bg-linear-to-t from-slate-900 to-transparent"/>
-                    <Link
-                        href='/'
-                        className="absolute top-6 left-6 bg-slate-800/80 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-semibold backdrop-blur-sm transition"
-                    >
-                        ← Volver
-                    </Link>
+                <BackButton/>
             </div>
 
             <div className="max-w-5xl mx-auto px-6 -mt-32 relative z-10 flex flex-col md:flex-row gap-8 pb-12">
