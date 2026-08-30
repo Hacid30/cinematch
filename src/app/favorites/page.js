@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useFavoritesStore } from '@/store/useFavoritesStore';
 import MovieCard from '@/components/MovieCard';
-import Link from 'next/link';
+import BackButton from '@/components/BackButton';
 
 export default function FavoritePage() {
     const [ mounted, setMounted ] = useState(false);
@@ -27,12 +27,7 @@ export default function FavoritePage() {
             <div className='max-w-7xl mx-auto'>
                 <div className='flex items-center justify-between mb-8'>
                     <h1 className='text-3xl font-bold text-slate-400 hover:text-white transition'>Mis Favoritos ❤️</h1>
-                    <Link 
-                        href='/'
-                        className='text-sm font-semibold text-slate-400 hover:text-white transition'
-                    >
-                        ← Volver al inicio
-                    </Link>
+                    <BackButton/>
                 </div>
 
                 {favorites.length === 0 ? (
