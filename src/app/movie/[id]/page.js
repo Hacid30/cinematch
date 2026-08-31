@@ -71,7 +71,7 @@ export default async function MovieDetailPage( { params } ){
           className="object-cover opacity-30"
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-slate-900 to-transparent" />
       <div className="absolute top-6 left-6 z-20">
         <BackButton />
       </div>
