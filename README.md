@@ -50,11 +50,11 @@ Create a .env.local file in the root directory and add your TMDB API Key:
 ```TMDB_API_KEY=your_tmdb_api_key_here```
 
 ### 4. Run the development server
-````npm run dev```
+```npm run dev```
 Open http://localhost:3000 in your browser to view the application.
 
 ## Project Structure
-
+```text
 cinematch/
 ├── public/              
 ├── src/
@@ -72,6 +72,7 @@ cinematch/
 │       └── Pagination.js  
 ├── .env.local          
 └── package.json
+```
 
 ## License
 This project was built for educational and portfolio purposes.
