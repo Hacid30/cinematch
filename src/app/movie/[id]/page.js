@@ -42,12 +42,24 @@ async function getMovieTrailer(id) {
     return trailer ? trailer.key : null;
 }
 
+async function getMovieCast(id) {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.TMDB_API_KEY}&language=es-CO`
+  );
+
+  if (!res.ok) return [];
+  const data = await res.json();
+
+  return data.cast?.slice(0, 10) || [];
+}
+
 export default async function MovieDetailPage( { params } ){
     const { id } = await params;
     
-    const [ movie, trailerKey ] = await Promise.all([
+    const [ movie, trailerKey, cast ] = await Promise.all([
         getMovieDetails(id),
-        getMovieTrailer(id)
+        getMovieTrailer(id),
+        getMovieCast(id)
     ]);
 
     if (!movie) notFound();
@@ -56,11 +68,13 @@ export default async function MovieDetailPage( { params } ){
     ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
     : null;
 
-    const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    const posterUrl = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : '/placeholder.jpg';
 
     return (
   <main className="min-h-screen text-white pb-12 bg-slate-900">
-    {/* 1. BANNER SUPERIOR CON BACKDROP */}
+    {/* BANNER SUPERIOR CON BACKDROP */}
     <div className="relative w-full h-[40vh] md:h-[50vh] bg-slate-800">
       {movie.backdrop_path && (
         <Image
@@ -77,7 +91,7 @@ export default async function MovieDetailPage( { params } ){
       </div>
     </div>
 
-    {/* 2. CONTENEDOR PRINCIPAL */}
+    {/* CONTENEDOR PRINCIPAL */}
     <div className="max-w-5xl mx-auto px-6 -mt-32 relative z-10">
       
       {/* SECCIÓN SUPERIOR: Póster + Información (Flexbox Horizontal en Desktop) */}
@@ -132,7 +146,47 @@ export default async function MovieDetailPage( { params } ){
         </div>
       </div>
 
-      {/* SECCIÓN INFERIOR: Tráiler Oficial (Ocupa todo el ancho abajo) */}
+      {/* SECCIÓN DE REPARTO PRINCIPAL */}
+      {cast.length > 0 && (
+        <div className="mt-12 pt-8 border-t border-slate-800">
+          <h2 className="text-2xl font-bold text-sky-400 mb-6 flex items-center gap-2">
+            Reparto Principal
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {cast.map((actor) => (
+              <div 
+                key={actor.id}
+                className="bg-slate-800/50 rounded-2xl p-4 border border-slate-800 flex flex-col items-center text-center hover:border-slate-700 transition-colors"
+              >
+                <div className="relative w-20 h-20 rounded-full overflow-hidden mb-3 bg-slate-700 shadow-md">
+                  {actor.profile_path ? (
+                    <Image
+                      src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
+                      alt={actor.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-2xl text-slate-400">
+                      👤
+                    </div>
+                  )}
+                </div>
+
+                <h3 className="font-semibold text-sm text-white line-clamp-1">
+                  {actor.name}
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">
+                  {actor.character}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* SECCIÓN INFERIOR: Tráiler Oficial */}
       <div className="mt-12 pt-8 border-t border-slate-800">
         <h2 className="text-2xl font-bold text-sky-400 mb-6 flex items-center gap-2">
           🎬 Tráiler Oficial

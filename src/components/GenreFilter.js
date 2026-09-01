@@ -4,7 +4,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 export default function GenreFilter( { genres, selectedGenre }){
     const router = useRouter();
-    const pahname = usePathname();
+    const pathname = usePathname();
     const SearchParams =  useSearchParams();
 
     const handleGenreClick = (genreId) => {
@@ -18,7 +18,7 @@ export default function GenreFilter( { genres, selectedGenre }){
             params.delete('genre');
         }
 
-        router.push(`${pahname}?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`);
     }
 
     return(
